@@ -25,38 +25,40 @@ func getTestStruct() Config {
 				WriterID: "OutputFile1",
 			},
 		},
-		Ports: []ConfigPort{
-			{
-				ID:      "Serial1",
-				Channel: "COM4",
-				Mode: goSerial.Mode{
-					BaudRate: 9600,
-					DataBits: 8,
+		Nodes: ConfigNodes{
+			Ports: []ConfigPort{
+				{
+					ID:      "Serial1",
+					Channel: "COM4",
+					Mode: goSerial.Mode{
+						BaudRate: 9600,
+						DataBits: 8,
+					},
 				},
 			},
-		},
-		Files: []ConfigFile{
-			{
-				ID:   "InputFile1",
-				Path: "inputfile1.txt",
+			Files: []ConfigFile{
+				{
+					ID:   "InputFile1",
+					Path: "inputfile1.txt",
+				},
+				{
+					ID:   "OutputFile1",
+					Path: "outputfile1.txt",
+				},
 			},
-			{
-				ID:   "OutputFile1",
-				Path: "outputfile1.txt",
+			Sockets: []ConfigSocket{
+				{
+					ID:       "socketID",
+					Protocol: "UDP",
+					Port:     54321,
+					Address:  "127.0.0.1",
+				},
 			},
-		},
-		Sockets: []ConfigSocket{
-			{
-				ID:       "socketID",
-				Protocol: "UDP",
-				Port:     54321,
-				Address:  "127.0.0.1",
-			},
-		},
-		Ipcs: []ConfigIPC{
-			{
-				ID:      "IPC1",
-				Channel: "Channel1",
+			Ipcs: []ConfigIPC{
+				{
+					ID:      "IPC1",
+					Channel: "Channel1",
+				},
 			},
 		},
 		Connections: []Connection{},
@@ -64,25 +66,26 @@ func getTestStruct() Config {
 }
 
 func TestDuplicateIDs_NoDuplicates(t *testing.T) {
-	ports := []ConfigPort{
-		{
-			ID: "myPortID",
+	nodes := ConfigNodes{
+		Ports: []ConfigPort{
+			{
+				ID: "myPortID",
+			},
+			{
+				ID: "myPortID2",
+			},
 		},
-		{
-			ID: "myPortID2",
+		Files: []ConfigFile{
+			{
+				ID: "myFileID",
+			},
+			{
+				ID: "myFileID2",
+			},
 		},
 	}
 
-	files := []ConfigFile{
-		{
-			ID: "myFileID",
-		},
-		{
-			ID: "myFileID2",
-		},
-	}
-
-	c := Config{Ports: ports, Files: files}
+	c := Config{Nodes: nodes}
 	err := c.componentIDsAreUnique()
 	require.Nil(t, err)
 }
@@ -106,15 +109,15 @@ func TestDuplicateIDs_WithDuplicates(t *testing.T) {
 		},
 	}
 
-	c := &Config{Ports: ports, Files: files}
+	c := &Config{Nodes: ConfigNodes{Ports: ports, Files: files}}
 	err := c.componentIDsAreUnique()
 	require.Error(t, err)
 
-	c = &Config{Files: files}
+	c = &Config{Nodes: ConfigNodes{Files: files}}
 	err = c.componentIDsAreUnique()
 	require.NoError(t, err)
 
-	c = &Config{Ports: ports}
+	c = &Config{Nodes: ConfigNodes{Ports: ports}}
 	err = c.componentIDsAreUnique()
 	require.NoError(t, err)
 
@@ -127,7 +130,7 @@ func TestDuplicateIDs_WithDuplicates(t *testing.T) {
 		},
 	}
 
-	c = &Config{Ports: ports}
+	c = &Config{Nodes: ConfigNodes{Ports: ports}}
 	err = c.componentIDsAreUnique()
 	require.Error(t, err)
 
@@ -140,7 +143,7 @@ func TestDuplicateIDs_WithDuplicates(t *testing.T) {
 		},
 	}
 
-	c = &Config{Files: files}
+	c = &Config{Nodes: ConfigNodes{Files: files}}
 	err = c.componentIDsAreUnique()
 	require.Error(t, err)
 }
@@ -186,7 +189,9 @@ func TestCombineToReadersAndWriters(t *testing.T) {
 			}
 			config := &Config{
 				ConfConns: connections,
-				Files:     fileConfig,
+				Nodes: ConfigNodes{
+					Files: fileConfig,
+				},
 			}
 			err := config.Initialise()
 			require.NoError(t, err)
@@ -226,7 +231,9 @@ func TestApplyConfig_FileToFile(t *testing.T) {
 
 			config := Config{
 				ConfConns: connections,
-				Files:     fileConfig,
+				Nodes: ConfigNodes{
+					Files: fileConfig,
+				},
 			}
 			err := config.Initialise()
 			require.NoError(t, err)
@@ -275,7 +282,9 @@ func TestApplyConfig_StdInToFileToStdOut(t *testing.T) {
 
 				config := Config{
 					ConfConns: connections,
-					Files:     fileConfig,
+					Nodes: ConfigNodes{
+						Files: fileConfig,
+					},
 				}
 				err := config.Initialise()
 				require.NoError(t, err)
@@ -336,7 +345,9 @@ func TestApplyConfig_MultipleWriters(t *testing.T) {
 
 				config := Config{
 					ConfConns: connections,
-					Files:     fileConfig,
+					Nodes: ConfigNodes{
+						Files: fileConfig,
+					},
 				}
 
 				err := config.Initialise()
@@ -402,8 +413,10 @@ func TestApplyConfig_WithUDPSockets(t *testing.T) {
 
 			config := Config{
 				ConfConns: connections,
-				Files:     fileConfig,
-				Sockets:   socketConfig,
+				Nodes: ConfigNodes{
+					Files:   fileConfig,
+					Sockets: socketConfig,
+				},
 			}
 
 			err := config.Initialise()
@@ -476,8 +489,10 @@ func TestApplyConfig_WithMultipleTCPSockets(t *testing.T) {
 
 			config := Config{
 				ConfConns: connections,
-				Files:     fileConfig,
-				Sockets:   socketConfig,
+				Nodes: ConfigNodes{
+					Files:   fileConfig,
+					Sockets: socketConfig,
+				},
 			}
 
 			err := config.Initialise()
@@ -543,8 +558,10 @@ func TestApplyConfig_WithMultipleIPC(t *testing.T) {
 
 			config := Config{
 				ConfConns: connections,
-				Files:     fileConfig,
-				Ipcs:      ipcConfig,
+				Nodes: ConfigNodes{
+					Files: fileConfig,
+					Ipcs:  ipcConfig,
+				},
 			}
 
 			err := config.Initialise()

@@ -15,10 +15,12 @@ type ConfigFile struct {
 	Path string
 }
 
+// [ConfigModel.GetID]
 func (c ConfigFile) GetID() string {
 	return c.ID
 }
 
+// [ConfigModel.Validate]
 func (c ConfigFile) Validate() error {
 	// TODO: Should we fail on input files that don't exist?
 	if _, err := os.Stat(c.Path); errors.Is(err, os.ErrNotExist) {
@@ -31,10 +33,12 @@ func (c ConfigFile) Validate() error {
 	return nil
 }
 
+// [ConfigModel.Reader]
 func (c ConfigFile) Reader() (io.ReadCloser, error) {
 	return os.OpenFile(c.Path, os.O_RDONLY, os.ModeType)
 }
 
+// [ConfigModel.Writer]
 func (c ConfigFile) Writer() (io.WriteCloser, error) {
 	file, err := os.OpenFile(c.Path, os.O_CREATE, os.ModeAppend)
 	if err != nil {

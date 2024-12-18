@@ -16,16 +16,20 @@ const (
 
 type Config struct {
 	ConfConns []ConfigConnection
-	Ports     []ConfigPort
-	Files     []ConfigFile
-	Sockets   []ConfigSocket
-	Ipcs      []ConfigIPC
+	Nodes     ConfigNodes
 	Settings  ConfigSettings
 
 	models      map[string]ConfigModel    `json:"-"`
 	readers     map[string]io.ReadCloser  `json:"-"`
 	writers     map[string]io.WriteCloser `json:"-"`
 	Connections []Connection              `json:"-"`
+}
+
+type ConfigNodes struct {
+	Ports   []ConfigPort
+	Files   []ConfigFile
+	Sockets []ConfigSocket
+	Ipcs    []ConfigIPC
 }
 
 type Connection struct {
@@ -108,8 +112,9 @@ func isInvalidID(id string) bool {
 // Check that the IDs of files and ports are unique and also do not clash with stdin or stdout
 func (c *Config) componentIDsAreUnique() error {
 	c.models = make(map[string]ConfigModel)
+	nodes := c.Nodes
 
-	for _, port := range c.Ports {
+	for _, port := range nodes.Ports {
 		if _, exists := c.models[port.ID]; isInvalidID(port.ID) || exists {
 			return fmt.Errorf("found port with a duplicate ID [%s] defined or is overriding \"%s\" or \"%s\"", port.ID, StdIn, StdOut)
 		} else {
@@ -117,7 +122,7 @@ func (c *Config) componentIDsAreUnique() error {
 		}
 	}
 
-	for _, file := range c.Files {
+	for _, file := range nodes.Files {
 		if _, exists := c.models[file.ID]; isInvalidID(file.ID) || exists {
 			return fmt.Errorf("found file with a duplicate ID [%s] defined or is overriding \"%s\" or \"%s\"", file.ID, StdIn, StdOut)
 		} else {
@@ -125,7 +130,7 @@ func (c *Config) componentIDsAreUnique() error {
 		}
 	}
 
-	for _, socket := range c.Sockets {
+	for _, socket := range nodes.Sockets {
 		if _, exists := c.models[socket.ID]; isInvalidID(socket.ID) || exists {
 			return fmt.Errorf("found socket with a duplicate ID [%s] defined or is overriding \"%s\" or \"%s\"", socket.ID, StdIn, StdOut)
 		} else {
@@ -133,7 +138,7 @@ func (c *Config) componentIDsAreUnique() error {
 		}
 	}
 
-	for _, ipc := range c.Ipcs {
+	for _, ipc := range nodes.Ipcs {
 		if _, exists := c.models[ipc.ID]; isInvalidID(ipc.ID) || exists {
 			return fmt.Errorf("found ipc with a duplicate ID [%s] defined or is overriding \"%s\" or \"%s\"", ipc.ID, StdIn, StdOut)
 		} else {

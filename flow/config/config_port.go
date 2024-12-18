@@ -17,10 +17,12 @@ type ConfigPort struct {
 	Port *goSerial.Port `json:"-"`
 }
 
+// [ConfigModel.GetID]
 func (c ConfigPort) GetID() string {
 	return c.ID
 }
 
+// [ConfigModel.Validate]
 func (c ConfigPort) Validate() error {
 	ports := serial.GetSerialPorts()
 	if !slices.Contains(ports, c.Channel) {
@@ -38,6 +40,7 @@ func (c *ConfigPort) Open() error {
 	return nil
 }
 
+// [ConfigModel.Reader]
 func (c ConfigPort) Reader() (io.ReadCloser, error) {
 	if c.Port == nil {
 		err := c.Open()
@@ -48,6 +51,7 @@ func (c ConfigPort) Reader() (io.ReadCloser, error) {
 	return *c.Port, nil
 }
 
+// [ConfigModel.Writer]
 func (c ConfigPort) Writer() (io.WriteCloser, error) {
 	if c.Port == nil {
 		err := c.Open()

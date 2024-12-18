@@ -1,0 +1,21 @@
+connections:
+  - readerid: "InputFile"
+    writerid: "OutputFile"
+  - readerid: "OutputFile"
+    writerid: "stdout"
+files:
+  - id: "InputFile"
+    path: "input.txt"
+  - id: "OutputFile"
+    path: "output.txt"
+sockets:
+  - id: "Send-from-TCP"
+    protocol: "TCP"
+    address: "127.0.0.1"
+    port: 57132
+  - id: "Recv-to-UDP"
+    protocol: "UDP"
+    address: "127.0.0.1"
+    port: 63211
+settings:
+  timeout: 5

@@ -84,6 +84,7 @@ func TestIPCRead_DataFromMultipleSockets(t *testing.T) {
 	writer1, err := NewIPCWriter("TestIPCRead_DataFromMultipleSockets")
 	require.NoError(t, err)
 	defer writer1.Close()
+
 	n, err := writer1.Write([]byte(content))
 	require.NoError(t, err)
 	require.Equal(t, len(content), n)
@@ -91,6 +92,7 @@ func TestIPCRead_DataFromMultipleSockets(t *testing.T) {
 	writer2, err := NewIPCWriter("TestIPCRead_DataFromMultipleSockets")
 	require.NoError(t, err)
 	defer writer2.Close()
+
 	n, err = writer2.Write([]byte(content))
 	require.NoError(t, err)
 	require.Equal(t, len(content), n)

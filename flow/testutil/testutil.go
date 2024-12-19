@@ -1,6 +1,7 @@
 package testutil
 
 import (
+	"net"
 	"os"
 	"testing"
 	"time"
@@ -60,4 +61,24 @@ func TakesAtleast(t *testing.T, duration time.Duration, testFunc func()) {
 
 	diff := time.Since(start)
 	require.GreaterOrEqual(t, diff, duration)
+}
+
+func GetUDPPort(conn *net.UDPConn) uint16 {
+	if conn != nil {
+		if addr, ok := conn.LocalAddr().(*net.UDPAddr); ok {
+			return addr.AddrPort().Port()
+		}
+	}
+
+	return 0
+}
+
+func GetTCPPort(conn *net.TCPListener) uint16 {
+	if conn != nil {
+		if addr, ok := conn.Addr().(*net.TCPAddr); ok {
+			return addr.AddrPort().Port()
+		}
+	}
+
+	return 0
 }

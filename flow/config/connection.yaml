@@ -18,5 +18,8 @@ nodes:
       protocol: "UDP"
       address: "127.0.0.1"
       port: 63211
+  ipcs:
+    - id: "ipc1"
+      channel: "ipc-channel1"
 settings:
   timeout: 5

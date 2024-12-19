@@ -32,7 +32,7 @@ func ApplyConfigurationFromFile(filepath string) {
 	ctx, cancelFunc := context.WithCancel(signalCtx)
 
 	// TODO: If we have stdin configured, we need to start another go routine that is grabbing content from stdin
-	go applyConfig(ctx, cancelFunc, config.Connections, config.Settings)
+	go applyConfig(ctx, cancelFunc, config.Conns, config.Settings)
 	<-ctx.Done()
 }
 

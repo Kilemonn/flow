@@ -14,8 +14,11 @@ Below is general usage outlines for the main use cases for using this tool.
 ### Flow
 
 To initiate and apply a configuration from a `yaml` file to direct data between different components on a machine.
-This scenario requires a yaml file to be defined that holds the `node` and their `connections`.
 
+To run:
+> flow -f ./connection.yaml config-apply
+
+This scenario requires a yaml file to be defined that holds the `node`, their `connections` and `settings`.
 A simple sample is below, which will copy all data from the "input.txt" file into the "output.txt" file then from that file to `stdout`.
 
 ```yaml

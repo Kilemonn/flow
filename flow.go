@@ -53,7 +53,6 @@ func main() {
 		serial.SerialList()
 	case MENU_OPTION_CONFIG_APPLY:
 		config.ApplyConfigurationFromFile(configFilePath)
-		fmt.Println("Closed cleanly...")
 	default:
 		printHelp()
 	}

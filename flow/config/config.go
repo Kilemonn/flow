@@ -15,14 +15,14 @@ const (
 )
 
 type Config struct {
-	ConfConns []ConfigConnection
-	Nodes     ConfigNodes
-	Settings  ConfigSettings
+	Connections []ConfigConnection
+	Nodes       ConfigNodes
+	Settings    ConfigSettings
 
-	models      map[string]ConfigModel    `json:"-"`
-	readers     map[string]io.ReadCloser  `json:"-"`
-	writers     map[string]io.WriteCloser `json:"-"`
-	Connections []Connection              `json:"-"`
+	models  map[string]ConfigModel    `json:"-"`
+	readers map[string]io.ReadCloser  `json:"-"`
+	writers map[string]io.WriteCloser `json:"-"`
+	Conns   []Connection              `json:"-"`
 }
 
 type ConfigNodes struct {
@@ -163,7 +163,7 @@ func (c *Config) combineToReadersAndWriters() error {
 	// Firstly iterate over and ONLY initialise the READER (listening) sockets, since if we connect to ourself we need to make sure
 	// the reader is listening first before the writer connects to us (for TCP). See below for the second loop.
 	// This is the same for IPC channels.
-	for _, connection := range c.ConfConns {
+	for _, connection := range c.Connections {
 		rID := connection.ReaderID
 
 		if _, exists := c.readers[rID]; !exists {
@@ -178,7 +178,7 @@ func (c *Config) combineToReadersAndWriters() error {
 	}
 
 	// Move the socket writer init and IPC init to a second loop:
-	for _, connection := range c.ConfConns {
+	for _, connection := range c.Connections {
 		wID := connection.WriterID
 
 		if _, exists := c.writers[wID]; !exists {
@@ -193,7 +193,7 @@ func (c *Config) combineToReadersAndWriters() error {
 	}
 
 	// -1 from reader and writer count since stdin and stdout are always registered
-	fmt.Printf("Configured [%d] writers, [%d] readers and [%d] connections.\n", len(c.writers)-1, len(c.readers)-1, len(c.ConfConns))
+	fmt.Printf("Configured [%d] writers, [%d] readers and [%d] connections.\n", len(c.writers)-1, len(c.readers)-1, len(c.Connections))
 	return nil
 }
 
@@ -201,14 +201,14 @@ func (c *Config) combineToReadersAndWriters() error {
 // This will look up and resolve multiple writers per reader, and bundle them in a [io.MultiWriter].
 func (c *Config) createConnections() {
 	convertedReaders := make(map[string]bool)
-	c.Connections = make([]Connection, 0)
-	for _, conf := range c.ConfConns {
+	c.Conns = make([]Connection, 0)
+	for _, conf := range c.Connections {
 		if _, exists := convertedReaders[conf.ReaderID]; !exists {
 			writer, writerIds := c.getWritersForReaderId(conf.ReaderID)
 			convertedReaders[conf.ReaderID] = true
 
 			if writer != nil {
-				c.Connections = append(c.Connections, Connection{
+				c.Conns = append(c.Conns, Connection{
 					Reader:    c.readers[conf.ReaderID],
 					ReaderId:  conf.ReaderID,
 					Writer:    writer,
@@ -226,7 +226,7 @@ func (c *Config) createConnections() {
 func (c Config) getWritersForReaderId(readerId string) (io.Writer, []string) {
 	w := []io.Writer{}
 	writerNames := []string{}
-	for _, conf := range c.ConfConns {
+	for _, conf := range c.Connections {
 		if conf.ReaderID == readerId {
 			w = append(w, c.writers[conf.WriterID])
 			writerNames = append(writerNames, conf.WriterID)

@@ -15,7 +15,7 @@ import (
 
 func getTestStruct() Config {
 	return Config{
-		ConfConns: []ConfigConnection{
+		Connections: []ConfigConnection{
 			{
 				ReaderID: "InputFile1",
 				WriterID: "Serial1",
@@ -61,7 +61,7 @@ func getTestStruct() Config {
 				},
 			},
 		},
-		Connections: []Connection{},
+		Conns: []Connection{},
 	}
 }
 
@@ -188,7 +188,7 @@ func TestCombineToReadersAndWriters(t *testing.T) {
 				},
 			}
 			config := &Config{
-				ConfConns: connections,
+				Connections: connections,
 				Nodes: ConfigNodes{
 					Files: fileConfig,
 				},
@@ -230,7 +230,7 @@ func TestApplyConfig_FileToFile(t *testing.T) {
 			}
 
 			config := Config{
-				ConfConns: connections,
+				Connections: connections,
 				Nodes: ConfigNodes{
 					Files: fileConfig,
 				},
@@ -246,7 +246,7 @@ func TestApplyConfig_FileToFile(t *testing.T) {
 			testutil.TakesAtleast(t, time.Duration(settings.Timeout*int(time.Second)), func() {
 				ctx, cancelFunc := context.WithCancel(context.Background())
 				defer config.Close()
-				go applyConfig(ctx, cancelFunc, config.Connections, settings)
+				go applyConfig(ctx, cancelFunc, config.Conns, settings)
 				<-ctx.Done()
 			})
 
@@ -281,7 +281,7 @@ func TestApplyConfig_StdInToFileToStdOut(t *testing.T) {
 				}
 
 				config := Config{
-					ConfConns: connections,
+					Connections: connections,
 					Nodes: ConfigNodes{
 						Files: fileConfig,
 					},
@@ -293,7 +293,7 @@ func TestApplyConfig_StdInToFileToStdOut(t *testing.T) {
 				testutil.TakesAtleast(t, time.Duration(settings.Timeout*int(time.Second)), func() {
 					ctx, cancelFunc := context.WithCancel(context.Background())
 					defer config.Close()
-					go applyConfig(ctx, cancelFunc, config.Connections, settings)
+					go applyConfig(ctx, cancelFunc, config.Conns, settings)
 					<-ctx.Done()
 				})
 			})
@@ -344,7 +344,7 @@ func TestApplyConfig_MultipleWriters(t *testing.T) {
 				}
 
 				config := Config{
-					ConfConns: connections,
+					Connections: connections,
 					Nodes: ConfigNodes{
 						Files: fileConfig,
 					},
@@ -357,7 +357,7 @@ func TestApplyConfig_MultipleWriters(t *testing.T) {
 				testutil.TakesAtleast(t, time.Duration(settings.Timeout*int(time.Second)), func() {
 					ctx, cancelFunc := context.WithCancel(context.Background())
 					defer config.Close()
-					go applyConfig(ctx, cancelFunc, config.Connections, settings)
+					go applyConfig(ctx, cancelFunc, config.Conns, settings)
 					<-ctx.Done()
 				})
 
@@ -412,7 +412,7 @@ func TestApplyConfig_WithUDPSockets(t *testing.T) {
 			}
 
 			config := Config{
-				ConfConns: connections,
+				Connections: connections,
 				Nodes: ConfigNodes{
 					Files:   fileConfig,
 					Sockets: socketConfig,
@@ -426,7 +426,7 @@ func TestApplyConfig_WithUDPSockets(t *testing.T) {
 			testutil.TakesAtleast(t, time.Duration(settings.Timeout*int(time.Second)), func() {
 				ctx, cancelFunc := context.WithCancel(context.Background())
 				defer config.Close()
-				go applyConfig(ctx, cancelFunc, config.Connections, settings)
+				go applyConfig(ctx, cancelFunc, config.Conns, settings)
 				<-ctx.Done()
 			})
 
@@ -488,7 +488,7 @@ func TestApplyConfig_WithMultipleTCPSockets(t *testing.T) {
 			}
 
 			config := Config{
-				ConfConns: connections,
+				Connections: connections,
 				Nodes: ConfigNodes{
 					Files:   fileConfig,
 					Sockets: socketConfig,
@@ -502,7 +502,7 @@ func TestApplyConfig_WithMultipleTCPSockets(t *testing.T) {
 			testutil.TakesAtleast(t, time.Duration(settings.Timeout*int(time.Second)), func() {
 				ctx, cancelFunc := context.WithCancel(context.Background())
 				defer config.Close()
-				go applyConfig(ctx, cancelFunc, config.Connections, settings)
+				go applyConfig(ctx, cancelFunc, config.Conns, settings)
 				<-ctx.Done()
 			})
 
@@ -557,7 +557,7 @@ func TestApplyConfig_WithMultipleIPC(t *testing.T) {
 			}
 
 			config := Config{
-				ConfConns: connections,
+				Connections: connections,
 				Nodes: ConfigNodes{
 					Files: fileConfig,
 					Ipcs:  ipcConfig,
@@ -571,7 +571,7 @@ func TestApplyConfig_WithMultipleIPC(t *testing.T) {
 			testutil.TakesAtleast(t, time.Duration(settings.Timeout*int(time.Second)), func() {
 				ctx, cancelFunc := context.WithCancel(context.Background())
 				defer config.Close()
-				go applyConfig(ctx, cancelFunc, config.Connections, settings)
+				go applyConfig(ctx, cancelFunc, config.Conns, settings)
 				<-ctx.Done()
 			})
 

@@ -8,11 +8,18 @@ import (
 	"os"
 
 	"github.com/Kilemonn/flow/flow/bidetwriter"
+	"github.com/Kilemonn/flow/flow/file"
 )
 
 type ConfigFile struct {
 	ID   string
 	Path string
+	// Refer to syscall properties for your OS, specifically: syscall.O_APPEND, syscall.O_TRUNC.
+	// This value is XOR'd with O_CREATE so the file is always created.
+	// If no flag is provided, by default the file is created and truncated.
+	Flag int
+
+	file *file.SyncFileReadWriter
 }
 
 // [ConfigModel.GetID]
@@ -35,14 +42,29 @@ func (c ConfigFile) Validate() error {
 
 // [ConfigModel.Reader]
 func (c ConfigFile) Reader() (io.ReadCloser, error) {
-	return os.OpenFile(c.Path, os.O_RDONLY, os.ModeType)
+	err := c.openFile()
+	return c.file, err
 }
 
 // [ConfigModel.Writer]
 func (c ConfigFile) Writer() (io.WriteCloser, error) {
-	file, err := os.OpenFile(c.Path, os.O_CREATE, os.ModeAppend)
+	err := c.openFile()
 	if err != nil {
 		return nil, err
 	}
-	return bidetwriter.NewBidetWriter(bufio.NewWriter(file)), nil
+	return bidetwriter.NewBidetWriter(bufio.NewWriter(c.file)), nil
+}
+
+func (c *ConfigFile) openFile() error {
+	if c.file == nil {
+		mode := os.O_CREATE | os.O_RDWR
+		// If they have defined truncation, we should remove append from the configured mode
+		if c.Flag|os.O_TRUNC == os.O_TRUNC {
+			mode = os.O_CREATE | os.O_RDWR
+		}
+		temp, err := file.NewSynchronisedFileReadWriter(c.Path, mode)
+		c.file = &temp
+		return err
+	}
+	return nil
 }

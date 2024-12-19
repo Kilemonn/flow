@@ -42,27 +42,23 @@ func (c ConfigFile) Validate() error {
 
 // [ConfigModel.Reader]
 func (c ConfigFile) Reader() (io.ReadCloser, error) {
-	err := c.openFile()
+	err := c.initialiseFile()
 	return c.file, err
 }
 
 // [ConfigModel.Writer]
 func (c ConfigFile) Writer() (io.WriteCloser, error) {
-	err := c.openFile()
+	err := c.initialiseFile()
 	if err != nil {
 		return nil, err
 	}
 	return bidetwriter.NewBidetWriter(bufio.NewWriter(c.file)), nil
 }
 
-func (c *ConfigFile) openFile() error {
+func (c *ConfigFile) initialiseFile() error {
 	if c.file == nil {
 		mode := os.O_CREATE | os.O_RDWR
-		// If they have defined truncation, we should remove append from the configured mode
-		if c.Flag|os.O_TRUNC == os.O_TRUNC {
-			mode = os.O_CREATE | os.O_RDWR
-		}
-		temp, err := file.NewSynchronisedFileReadWriter(c.Path, mode)
+		temp, err := file.NewSynchronisedFileReadWriter(c.Path, mode|c.Flag)
 		c.file = &temp
 		return err
 	}

@@ -61,7 +61,7 @@ func TestFileWriterAndReader(t *testing.T) {
 	})
 }
 
-// Ensure that without any "flag" that the file is truncated by default
+// TestFileWithNoFlag Ensure that without any additional "flag" that the file is not truncated
 func TestFileWithNoFlag(t *testing.T) {
 	testutil.WithTempFile(t, func(filePath string) {
 		fileConfig := ConfigFile{
@@ -73,7 +73,7 @@ func TestFileWithNoFlag(t *testing.T) {
 		require.Equal(t, 0, fileConfig.Flag)
 		require.NoError(t, os.WriteFile(filePath, []byte(data), os.ModeType))
 
-		// With no flag provided the writer should "create" and truncate the file
+		// With no flag provided the writer should "create" and not truncate the file
 		require.NoError(t, fileConfig.Validate())
 		w, err := fileConfig.Writer()
 		require.NoError(t, err)
@@ -85,11 +85,11 @@ func TestFileWithNoFlag(t *testing.T) {
 
 		read, err := os.ReadFile(filePath)
 		require.NoError(t, err)
-		require.Equal(t, data, string(read))
+		require.Equal(t, data+data, string(read))
 	})
 }
 
-// Ensure that with the truncate flag that the file is truncated
+// TestFileWithTruncFlag Ensure that with the truncate flag that the file is truncated
 func TestFileWithTruncFlag(t *testing.T) {
 	testutil.WithTempFile(t, func(filePath string) {
 		fileConfig := ConfigFile{
@@ -119,7 +119,7 @@ func TestFileWithTruncFlag(t *testing.T) {
 	})
 }
 
-// Ensure that with the append flag that the file is appended to
+// TestFileWithAppendFlag Ensure that with the append flag that the file is appended to
 func TestFileWithAppendFlag(t *testing.T) {
 	testutil.WithTempFile(t, func(filePath string) {
 		fileConfig := ConfigFile{
@@ -148,6 +148,8 @@ func TestFileWithAppendFlag(t *testing.T) {
 	})
 }
 
+// TestFileAsReaderAndWriter_AppendMode_ReadAllFirst check behaviour of the append flag along with
+// reading all of the file content before writing more then reading the remaining
 func TestFileAsReaderAndWriter_AppendMode_ReadAllFirst(t *testing.T) {
 	testutil.WithTempFile(t, func(filePath string) {
 		fileConfig := ConfigFile{
@@ -184,11 +186,14 @@ func TestFileAsReaderAndWriter_AppendMode_ReadAllFirst(t *testing.T) {
 	})
 }
 
+// TestFileAsReaderAndWriter_NoMode_ReadAllFirst check behaviour of no flag along with
+// reading all of the file content before writing more then reading the remaining
 func TestFileAsReaderAndWriter_NoMode_ReadAllFirst(t *testing.T) {
 	testutil.WithTempFile(t, func(filePath string) {
 		fileConfig := ConfigFile{
 			Path: filePath,
 		}
+		require.Equal(t, 0, fileConfig.Flag)
 
 		initialContent := "initial"
 		require.NoError(t, os.WriteFile(filePath, []byte(initialContent), os.ModeAppend))
@@ -219,6 +224,8 @@ func TestFileAsReaderAndWriter_NoMode_ReadAllFirst(t *testing.T) {
 	})
 }
 
+// TestFileAsReaderAndWriter_AppendMode_WriteThenRead check behaviour of the append flag along with
+// writing additional content before reading all content in the file
 func TestFileAsReaderAndWriter_AppendMode_WriteThenRead(t *testing.T) {
 	testutil.WithTempFile(t, func(filePath string) {
 		fileConfig := ConfigFile{
@@ -250,11 +257,14 @@ func TestFileAsReaderAndWriter_AppendMode_WriteThenRead(t *testing.T) {
 	})
 }
 
+// TestFileAsReaderAndWriter_NoMode_WriteThenRead check behaviour of no flag along with
+// writing additional content before reading all content in the file
 func TestFileAsReaderAndWriter_NoMode_WriteThenRead(t *testing.T) {
 	testutil.WithTempFile(t, func(filePath string) {
 		fileConfig := ConfigFile{
 			Path: filePath,
 		}
+		require.Equal(t, 0, fileConfig.Flag)
 
 		initialContent := "initial"
 		require.NoError(t, os.WriteFile(filePath, []byte(initialContent), os.ModeAppend))

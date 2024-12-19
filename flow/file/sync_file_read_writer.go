@@ -12,8 +12,16 @@ type SyncFileReadWriter struct {
 	mutex sync.Mutex
 }
 
+// NewSynchronisedFileReadWriter create a new SyncFileReadWriter.
+// Do not pass os.O_APPEND as a flag, it is not required.
 func NewSynchronisedFileReadWriter(filepath string, flags int) (SyncFileReadWriter, error) {
 	file, err := os.OpenFile(filepath, flags, fs.ModeType)
+	if err != nil {
+		return SyncFileReadWriter{}, err
+	}
+
+	// Move to the start of the file to make sure the reading pointer is ready
+	_, err = file.Seek(0, io.SeekStart)
 	if err != nil {
 		return SyncFileReadWriter{}, err
 	}
@@ -32,6 +40,7 @@ func (rw *SyncFileReadWriter) Read(b []byte) (int, error) {
 }
 
 // [io.Writer]
+// Moves the file pointer to the end, performs the read, then returns it back to its prior position ready to Read
 func (rw *SyncFileReadWriter) Write(b []byte) (int, error) {
 	rw.mutex.Lock()
 	defer rw.mutex.Unlock()

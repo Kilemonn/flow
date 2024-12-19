@@ -9,6 +9,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
+// TestSyncFileReadWriter Check the sync file read writer properly resets the file pointer position after writing
 func TestSyncFileReadWriter(t *testing.T) {
 	testutil.WithTempFile(t, func(filepath string) {
 		rw, err := NewSynchronisedFileReadWriter(filepath, os.O_RDWR)

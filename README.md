@@ -120,6 +120,10 @@ nodes:
 ...
 ```
 
+#### Multiple Writers with the same Reader
+
+When the same `readerid` is defined multiple times, its data will be written to **each** configured `writerid` that it is paired with. Data is essentially duplicated and written to each defined `writer`.
+
 ### Interactive Serial
 
 In progress...

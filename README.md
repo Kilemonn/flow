@@ -57,6 +57,7 @@ A File is used to define a file in the system that you wish to read from or writ
 The `files` structure requires two properties:
 - `id` used to identify the `node` itself
 - `path` the path to the file
+- `trunc` (optional) determines whether the file should be truncated **before writing** by default this is false and file changes are appended
 
 ```yaml
 ...
@@ -64,6 +65,7 @@ nodes:
   files:
     - id: "InputFile"
       path: "input.txt"
+      trunc: false # optional
 ...
 ```
 

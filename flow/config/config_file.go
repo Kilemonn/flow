@@ -14,10 +14,9 @@ import (
 type ConfigFile struct {
 	ID   string
 	Path string
-	// Refer to syscall properties for your OS, specifically: syscall.O_APPEND, syscall.O_TRUNC.
-	// This value is XOR'd with O_CREATE so the file is always created.
-	// If no flag is provided, by default the file is created and truncated.
-	Flag int
+	// Determines whether this file is in truncate mode or append mode. By default this is false
+	// meaning it is in append mode.
+	Trunc bool
 
 	file *file.SyncFileReadWriter
 }
@@ -58,7 +57,10 @@ func (c ConfigFile) Writer() (io.WriteCloser, error) {
 func (c *ConfigFile) initialiseFile() error {
 	if c.file == nil {
 		mode := os.O_CREATE | os.O_RDWR
-		temp, err := file.NewSynchronisedFileReadWriter(c.Path, mode|c.Flag)
+		if c.Trunc {
+			mode |= os.O_TRUNC
+		}
+		temp, err := file.NewSynchronisedFileReadWriter(c.Path, mode)
 		c.file = &temp
 		return err
 	}

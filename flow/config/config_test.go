@@ -442,6 +442,7 @@ func TestApplyConfig_WithUDPSockets(t *testing.T) {
 // Ensure that all the data from multiple TCP connections are read in from the TCP reader.
 func TestApplyConfig_WithMultipleTCPSockets(t *testing.T) {
 	content := "TestApplyConfig_WithTCPSockets"
+	socketPort := uint16(64621)
 	testutil.WithBytesInStdIn(t, []byte(content), func() {
 		testutil.WithTempFile(t, func(outputFile string) {
 			fileConfig := []ConfigFile{
@@ -455,19 +456,19 @@ func TestApplyConfig_WithMultipleTCPSockets(t *testing.T) {
 				{
 					ID:       "sender-socket",
 					Protocol: "tcp",
-					Port:     54621,
+					Port:     socketPort,
 					Address:  "127.0.0.1",
 				},
 				{
 					ID:       "recv-socket",
 					Protocol: "tcp",
-					Port:     54621,
+					Port:     socketPort,
 					Address:  "127.0.0.1",
 				},
 				{
 					ID:       "sender-socket2",
 					Protocol: "tcp",
-					Port:     54621,
+					Port:     socketPort,
 					Address:  "127.0.0.1",
 				},
 			}

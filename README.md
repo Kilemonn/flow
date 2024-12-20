@@ -57,7 +57,7 @@ A File is used to define a file in the system that you wish to read from or writ
 The `files` structure requires two properties:
 - `id` used to identify the `node` itself
 - `path` the path to the file
-- `trunc` (optional) determines whether the file should be truncated **before writing** by default this is false and file changes are appended
+- `trunc` (optional) determines whether the file should be truncated once upon initialisation. **The file is only truncated if it is being written to (specified as a `writerid` in the `connections`).**
 
 ```yaml
 ...

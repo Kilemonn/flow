@@ -5,7 +5,7 @@ import (
 	"io"
 	"os"
 
-	"github.com/Kilemonn/flow/flow"
+	"github.com/Kilemonn/flow/flow/stdio"
 	"gopkg.in/yaml.v3"
 )
 
@@ -153,11 +153,11 @@ func (c *Config) componentIDsAreUnique() error {
 // StdIn and StdOut are also initialised and returned in these maps.
 func (c *Config) combineToReadersAndWriters() error {
 	c.readers = make(map[string]io.ReadCloser)
-	stdIn, _ := flow.CreateStdInReader()
+	stdIn, _ := stdio.CreateStdInReader()
 	c.readers[StdIn] = stdIn
 
 	c.writers = make(map[string]io.WriteCloser)
-	stdOut, _ := flow.CreateStdOutWriter()
+	stdOut, _ := stdio.CreateStdOutWriter()
 	c.writers[StdOut] = stdOut
 
 	// Firstly iterate over and ONLY initialise the READER (listening) sockets, since if we connect to ourself we need to make sure

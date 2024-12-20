@@ -7,7 +7,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/Kilemonn/flow/flow"
+	"github.com/Kilemonn/flow/flow/stdio"
 	goSerial "go.bug.st/serial"
 )
 
@@ -123,7 +123,7 @@ func StartSerial(com string, baud uint, parity string, dataLen uint, stopBits bo
 		return
 	}
 
-	reader, _ := flow.CreateStdInReader()
+	reader, _ := stdio.CreateStdInReader()
 	bytes, err := io.ReadAll(reader)
 	if err != nil {
 		fmt.Printf("Failed to read in all data from provided input stream. Error: [%s]", err.Error())
@@ -131,7 +131,7 @@ func StartSerial(com string, baud uint, parity string, dataLen uint, stopBits bo
 	}
 
 	// this needs to be fixed just testing things out
-	writer, _ := flow.CreateStdOutWriter()
+	writer, _ := stdio.CreateStdOutWriter()
 	go rxPrintThread(port, writer, false)
 	time.Sleep(1 * time.Second)
 

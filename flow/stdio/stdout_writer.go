@@ -1,4 +1,4 @@
-package flow
+package stdio
 
 import (
 	"bufio"

@@ -78,25 +78,27 @@ A Port is used to define a connected **Serial Port** that you wish to read from 
 The `ports` structure requires three properties:
 - `id` used to identify the `node` itself
 - `channel` "COM4" or /dev/tty1
-- `mode` which contains the following properties:
-    - `baudrate` The serial port bitrate
-    - `databits` 
-    - `parity` ?
-    - `stopbits` ?
-    - `initialstatusbits` ?
+- `mode` which contains the following properties: refer to https://pkg.go.dev/go.bug.st/serial#Mode
+    - `baudrate` serial port baudrate
+    - `databits` character size
+    - `parity` refer to https://pkg.go.dev/go.bug.st/serial#Parity
+    - `stopbits` refer to https://pkg.go.dev/go.bug.st/serial#StopBits
+    - `initialstatusbits` refer to https://pkg.go.dev/go.bug.st/serial#ModemOutputBits
 
 ```yaml
 ...
 nodes:
   ports:
-    - id: "Port1"
+    - id: "Serial1"
       channel: "COM4"
       mode:
         baudrate: 9600
-        databits: ""
-        parity: ""
-        stopbits: ""
-        initialstatusbits: ""
+        databits: 8
+        parity: 0
+        stopbits: 0
+        initialstatusbits: # optional below values are the default
+          rts: true
+          dtr: true
 ...
 ```
 

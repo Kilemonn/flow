@@ -41,7 +41,7 @@ func (c *ConfigPort) Open() error {
 }
 
 // [ConfigModel.Reader]
-func (c ConfigPort) Reader() (io.ReadCloser, error) {
+func (c *ConfigPort) Reader() (io.ReadCloser, error) {
 	if c.Port == nil {
 		err := c.Open()
 		if err != nil {
@@ -52,7 +52,7 @@ func (c ConfigPort) Reader() (io.ReadCloser, error) {
 }
 
 // [ConfigModel.Writer]
-func (c ConfigPort) Writer() (io.WriteCloser, error) {
+func (c *ConfigPort) Writer() (io.WriteCloser, error) {
 	if c.Port == nil {
 		err := c.Open()
 		if err != nil {

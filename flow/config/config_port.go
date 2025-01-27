@@ -40,10 +40,10 @@ func (c *ConfigPort) Open() error {
 	}
 	c.Port = &port
 	if c.ReadTimeout > 0 {
-		(*c.Port).SetReadTimeout(time.Millisecond * time.Duration(c.ReadTimeout))
+		err = (*c.Port).SetReadTimeout(time.Millisecond * time.Duration(c.ReadTimeout))
 	}
 
-	return nil
+	return err
 }
 
 // [ConfigModel.Reader]

@@ -38,8 +38,10 @@ func (c *ConfigPort) Open() error {
 	if err != nil {
 		return fmt.Errorf("failed to open connection to port with comm [%s] and ID [%s] with error: [%s]", c.Channel, c.ID, err.Error())
 	}
-	timeoutPort := serial.NewTimeoutPort(port, (time.Millisecond * time.Duration(c.ReadTimeout)))
-	c.Port = &timeoutPort
+	timeoutPort, err := serial.NewTimeoutPort(port, (time.Millisecond * time.Duration(c.ReadTimeout)))
+	if err == nil {
+		c.Port = &timeoutPort
+	}
 	return err
 }
 

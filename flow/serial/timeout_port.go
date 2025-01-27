@@ -12,11 +12,12 @@ type TimeoutPort struct {
 	Timeout time.Duration
 }
 
-func NewTimeoutPort(port goSerial.Port, timeout time.Duration) TimeoutPort {
+func NewTimeoutPort(port goSerial.Port, timeout time.Duration) (TimeoutPort, error) {
+	err := port.SetReadTimeout(timeout)
 	return TimeoutPort{
 		Port:    port,
 		Timeout: timeout,
-	}
+	}, err
 }
 
 // [io.Reader.Read]

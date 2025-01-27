@@ -76,6 +76,7 @@ A Port is used to define a connected **Serial Port** that you wish to read from 
 The `ports` structure requires three properties:
 - `id` used to identify the `node` itself
 - `channel` "COM4" or /dev/tty1
+- `readtimeout` the read timeout in **milliseconds** (when not provided this may cause the application to hang if not data can be read).
 - `mode` which contains the following properties: refer to https://pkg.go.dev/go.bug.st/serial#Mode
     - `baudrate` serial port baudrate
     - `databits` character size
@@ -89,6 +90,7 @@ nodes:
   ports:
     - id: "Serial1"
       channel: "COM4"
+      readtimeout: 200 # Optional, the read timeout value in milliseconds
       mode:
         baudrate: 9600
         databits: 8

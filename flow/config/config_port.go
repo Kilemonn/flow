@@ -15,7 +15,7 @@ type ConfigPort struct {
 	Channel string
 	Mode    goSerial.Mode
 	// The resolved and connected port, in a scenario where we call validate
-	Port        *serial.TimeoutPort `json:"-"`
+	Port        *serial.CustomPort `json:"-"`
 	ReadTimeout int
 }
 
@@ -38,11 +38,17 @@ func (c *ConfigPort) Open() error {
 	if err != nil {
 		return fmt.Errorf("failed to open connection to port with comm [%s] and ID [%s] with error: [%s]", c.Channel, c.ID, err.Error())
 	}
-	timeoutPort, err := serial.NewTimeoutPort(port, (time.Millisecond * time.Duration(c.ReadTimeout)))
-	if err == nil {
-		c.Port = &timeoutPort
+
+	if c.ReadTimeout > 0 {
+		err = port.SetReadTimeout(time.Millisecond * time.Duration(c.ReadTimeout))
+		if err != nil {
+			return fmt.Errorf("failed to set timeout on serial port connection with comm [%s] and ID [%s] with error: [%s]", c.Channel, c.ID, err.Error())
+		}
 	}
-	return err
+
+	customPort := serial.NewCustomPort(port)
+	c.Port = &customPort
+	return nil
 }
 
 // [ConfigModel.Reader]

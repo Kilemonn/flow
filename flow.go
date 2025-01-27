@@ -10,7 +10,7 @@ import (
 )
 
 const (
-	APPLICATION_VERSION = "1.1.0"
+	APPLICATION_VERSION = "1.0.0"
 	MENU_OPTION_HELP    = "help"
 
 	MENU_OPTION_SERIAL    = "serial"

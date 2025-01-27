@@ -1,6 +1,7 @@
 package serial
 
 import (
+	"io"
 	"time"
 
 	goSerial "go.bug.st/serial"
@@ -19,11 +20,14 @@ func NewTimeoutPort(port goSerial.Port, timeout time.Duration) TimeoutPort {
 }
 
 // [io.Reader.Read]
-func (p TimeoutPort) Read(b []byte) (int, error) {
-	if p.Timeout > 0 {
-		p.Port.SetReadTimeout(p.Timeout)
+func (p TimeoutPort) Read(b []byte) (n int, err error) {
+	n, err = p.Port.Read(b)
+
+	// TODO: The library should fix this, https://github.com/bugst/go-serial/issues/141
+	if n == 0 && err == nil {
+		return 0, io.EOF
 	}
-	return p.Port.Read(b)
+	return n, err
 }
 
 // [io.Writer.Write]

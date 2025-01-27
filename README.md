@@ -73,8 +73,6 @@ nodes:
 
 A Port is used to define a connected **Serial Port** that you wish to read from or write to.
 
-`TODO: Confirm Ports configuration and example config`
-
 The `ports` structure requires three properties:
 - `id` used to identify the `node` itself
 - `channel` "COM4" or /dev/tty1

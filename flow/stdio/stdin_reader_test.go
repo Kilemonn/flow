@@ -12,7 +12,7 @@ import (
 func TestStdInReader(t *testing.T) {
 	buffer := make([]byte, 10)
 	reader, err := CreateStdInReader()
-	require.Nil(t, err)
+	require.NoError(t, err)
 	n, _ := reader.Read(buffer)
 	require.Equal(t, 0, n)
 }
@@ -23,9 +23,9 @@ func TestCreateStdInReader_WithNameLine(t *testing.T) {
 
 	testutil.WithBytesInStdIn(t, []byte(expected), func() {
 		reader, err := CreateStdInReader()
-		require.Nil(t, err)
+		require.NoError(t, err)
 		bytes, err := io.ReadAll(reader)
-		require.Nil(t, err)
+		require.NoError(t, err)
 		require.Equal(t, expected, string(bytes))
 	})
 }
@@ -36,9 +36,9 @@ func TestCreateStdInReader_WithoutNewLine(t *testing.T) {
 
 	testutil.WithBytesInStdIn(t, []byte(expected), func() {
 		reader, err := CreateStdInReader()
-		require.Nil(t, err)
+		require.NoError(t, err)
 		bytes, err := io.ReadAll(reader)
-		require.Nil(t, err)
+		require.NoError(t, err)
 		require.Equal(t, expected, string(bytes))
 	})
 }

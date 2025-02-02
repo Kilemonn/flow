@@ -29,10 +29,10 @@ func TestStdoutWriter(t *testing.T) {
 	expected := "My name is Mr Cow"
 	written := testutil.CaptureStdout(t, func() {
 		writer, err := CreateStdOutWriter()
-		require.Nil(t, err)
+		require.NoError(t, err)
 		writer.Write([]byte(expected))
 	})
 	read, err := io.ReadAll(written)
-	require.Nil(t, err)
+	require.NoError(t, err)
 	require.Equal(t, expected, string(read))
 }

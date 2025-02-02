@@ -25,10 +25,10 @@ func TestFilesValid(t *testing.T) {
 
 		for _, fCon := range fileConfigs {
 			err := fCon.Validate()
-			require.Nil(t, err)
+			require.NoError(t, err)
 		}
 
-		require.Nil(t, os.Remove(fileThatDoesntExist))
+		require.NoError(t, os.Remove(fileThatDoesntExist))
 	})
 }
 
@@ -40,24 +40,24 @@ func TestFileWriterAndReader(t *testing.T) {
 			Path: filename,
 		}
 		writer, err := fileConfig.Writer()
-		require.Nil(t, err)
+		require.NoError(t, err)
 
 		data := "some file writer data"
 		_, err = writer.Write([]byte(data))
-		require.Nil(t, err)
+		require.NoError(t, err)
 
 		reader, err := fileConfig.Reader()
-		require.Nil(t, err)
+		require.NoError(t, err)
 		read, err := io.ReadAll(reader)
-		require.Nil(t, err)
+		require.NoError(t, err)
 		require.Equal(t, data, string(read))
 
 		// Ensure that if more data is written that is it is picked up during the next read
 		data = "more data to write to file"
 		_, err = writer.Write([]byte(data))
-		require.Nil(t, err)
+		require.NoError(t, err)
 		read, err = io.ReadAll(reader)
-		require.Nil(t, err)
+		require.NoError(t, err)
 		require.Equal(t, data, string(read))
 	})
 }

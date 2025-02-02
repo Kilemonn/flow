@@ -13,7 +13,7 @@ import (
 // the temp file is removed after this function finishes
 func WithTempFile(t *testing.T, testFunc func(string)) {
 	temp, err := os.CreateTemp("", "*")
-	require.Nil(t, err)
+	require.NoError(t, err)
 	defer os.Remove(temp.Name())
 
 	testFunc(temp.Name())
@@ -23,7 +23,7 @@ func WithTempFile(t *testing.T, testFunc func(string)) {
 // stdout is returned to normal after this function
 func CaptureStdout(t *testing.T, testFunc func()) *os.File {
 	reader, writer, err := os.Pipe()
-	require.Nil(t, err)
+	require.NoError(t, err)
 	defer writer.Close()
 
 	// Revert stdout after the end of this function
@@ -39,10 +39,10 @@ func CaptureStdout(t *testing.T, testFunc func()) *os.File {
 // reverts std in after the test is complete
 func WithBytesInStdIn(t *testing.T, bytes []byte, testFunc func()) {
 	reader, writer, err := os.Pipe()
-	require.Nil(t, err)
+	require.NoError(t, err)
 
 	n, err := writer.Write(bytes)
-	require.Nil(t, err)
+	require.NoError(t, err)
 	require.Equal(t, len(bytes), n)
 	writer.Close()
 

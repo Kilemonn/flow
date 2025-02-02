@@ -87,7 +87,7 @@ func TestDuplicateIDs_NoDuplicates(t *testing.T) {
 
 	c := Config{Nodes: nodes}
 	err := c.componentIDsAreUnique()
-	require.Nil(t, err)
+	require.NoError(t, err)
 }
 
 func TestDuplicateIDs_WithDuplicates(t *testing.T) {
@@ -154,10 +154,10 @@ func TestYamlReadWrite(t *testing.T) {
 		var finalConfig Config
 
 		err := initialConfig.writeConfig(fileName)
-		require.Nil(t, err)
+		require.NoError(t, err)
 
 		finalConfig, err = readConfig(fileName)
-		require.Nil(t, err)
+		require.NoError(t, err)
 
 		require.Equal(t, initialConfig, finalConfig)
 	})
@@ -240,7 +240,7 @@ func TestApplyConfig_FileToFile(t *testing.T) {
 
 			content := "Wow some great content to write"
 			err = os.WriteFile(inputFile, []byte(content), os.ModeAppend)
-			require.Nil(t, err)
+			require.NoError(t, err)
 
 			settings := ConfigSettings{Timeout: 1}
 			testutil.TakesAtleast(t, time.Duration(settings.Timeout*int(time.Second)), func() {
@@ -251,7 +251,7 @@ func TestApplyConfig_FileToFile(t *testing.T) {
 			})
 
 			read, err := os.ReadFile(outputFile)
-			require.Nil(t, err)
+			require.NoError(t, err)
 			require.Equal(t, content, string(read))
 		})
 	})
@@ -299,10 +299,10 @@ func TestApplyConfig_StdInToFileToStdOut(t *testing.T) {
 			})
 
 			writtenToStdOut, err := io.ReadAll(stdout)
-			require.Nil(t, err)
+			require.NoError(t, err)
 
 			writtenToFile, err := os.ReadFile(file)
-			require.Nil(t, err)
+			require.NoError(t, err)
 
 			// Since there is other things being printed to std out, we want to make sure that the stdout contains the content
 			require.True(t, strings.Contains(string(writtenToStdOut), content))
@@ -362,10 +362,10 @@ func TestApplyConfig_MultipleWriters(t *testing.T) {
 				})
 
 				writtenToFile, err := os.ReadFile(file)
-				require.Nil(t, err)
+				require.NoError(t, err)
 
 				writtenToFile2, err := os.ReadFile(file2)
-				require.Nil(t, err)
+				require.NoError(t, err)
 
 				require.Equal(t, content, string(writtenToFile))
 				require.Equal(t, content+content, string(writtenToFile2))
@@ -431,7 +431,7 @@ func TestApplyConfig_WithUDPSockets(t *testing.T) {
 			})
 
 			writtenToFile, err := os.ReadFile(outputFile)
-			require.Nil(t, err)
+			require.NoError(t, err)
 
 			require.Equal(t, content, string(writtenToFile))
 
@@ -508,7 +508,7 @@ func TestApplyConfig_WithMultipleTCPSockets(t *testing.T) {
 			})
 
 			writtenToFile, err := os.ReadFile(outputFile)
-			require.Nil(t, err)
+			require.NoError(t, err)
 
 			require.Equal(t, content+content, string(writtenToFile))
 		})
@@ -577,7 +577,7 @@ func TestApplyConfig_WithMultipleIPC(t *testing.T) {
 			})
 
 			writtenToFile, err := os.ReadFile(outputFile)
-			require.Nil(t, err)
+			require.NoError(t, err)
 
 			require.Equal(t, content+content, string(writtenToFile))
 		})

@@ -1,6 +1,8 @@
 # flow
 A data channel creation and chaining CLI tool for directing data flow between processes, files, sockets and serial ports.
 
+[![Go Coverage](https://github.com/Kilemonn/flow/wiki/coverage.svg)](https://raw.githack.com/wiki/Kilemonn/flow/coverage.html)
+
 ## Quick Start
 
 Install the tool via command line:

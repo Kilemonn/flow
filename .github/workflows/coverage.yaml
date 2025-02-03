@@ -24,10 +24,5 @@ jobs:
     - name: Test
       run: go test -v ./...
 
-    - name: Log Coverage and Commit Hash
-      run: |
-        echo "Coverage: ${{ steps.jacoco.outputs.coverage }}%"
-        echo "Current Hash: $(git rev-parse HEAD)"
-
     - name: Update coverage badge
       uses: ncruces/go-coverage-report@main

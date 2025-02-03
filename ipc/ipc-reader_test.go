@@ -5,7 +5,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Kilemonn/flow/flow/testutil"
+	"github.com/Kilemonn/flow/testutil"
 	"github.com/stretchr/testify/require"
 )
 

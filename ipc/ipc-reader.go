@@ -4,7 +4,7 @@ import (
 	"io"
 	"time"
 
-	"github.com/Kilemonn/flow/flow/queuedreader"
+	"github.com/Kilemonn/flow/queuedreader"
 	ipcClient "github.com/Kilemonn/go-ipc/client"
 	ipcServer "github.com/Kilemonn/go-ipc/server"
 )

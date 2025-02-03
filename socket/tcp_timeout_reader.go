@@ -5,7 +5,7 @@ import (
 	"slices"
 	"time"
 
-	"github.com/Kilemonn/flow/flow/queuedreader"
+	"github.com/Kilemonn/flow/queuedreader"
 )
 
 type TCPTimeoutReader struct {

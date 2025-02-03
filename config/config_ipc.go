@@ -3,7 +3,7 @@ package config
 import (
 	"io"
 
-	"github.com/Kilemonn/flow/flow/ipc"
+	"github.com/Kilemonn/flow/ipc"
 )
 
 type ConfigIPC struct {

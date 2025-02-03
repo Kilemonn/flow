@@ -7,7 +7,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/Kilemonn/flow/flow/stdio"
+	"github.com/Kilemonn/flow/stdio"
 	goSerial "go.bug.st/serial"
 )
 

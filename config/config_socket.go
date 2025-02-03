@@ -3,7 +3,7 @@ package config
 import (
 	"io"
 
-	"github.com/Kilemonn/flow/flow/socket"
+	"github.com/Kilemonn/flow/socket"
 )
 
 type ConfigSocket struct {

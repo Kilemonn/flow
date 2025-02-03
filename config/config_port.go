@@ -6,7 +6,7 @@ import (
 	"slices"
 	"time"
 
-	"github.com/Kilemonn/flow/flow/serial"
+	"github.com/Kilemonn/flow/serial"
 	goSerial "go.bug.st/serial"
 )
 

@@ -5,7 +5,7 @@ import (
 	"io"
 	"os"
 
-	"github.com/Kilemonn/flow/flow/stdio"
+	"github.com/Kilemonn/flow/stdio"
 	"gopkg.in/yaml.v3"
 )
 

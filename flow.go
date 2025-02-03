@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/Kilemonn/flow/flow/config"
-	"github.com/Kilemonn/flow/flow/serial"
+	"github.com/Kilemonn/flow/config"
+	"github.com/Kilemonn/flow/serial"
 )
 
 const (

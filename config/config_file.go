@@ -7,8 +7,8 @@ import (
 	"io"
 	"os"
 
-	"github.com/Kilemonn/flow/flow/bidetwriter"
-	"github.com/Kilemonn/flow/flow/file"
+	"github.com/Kilemonn/flow/bidetwriter"
+	"github.com/Kilemonn/flow/file"
 )
 
 type ConfigFile struct {

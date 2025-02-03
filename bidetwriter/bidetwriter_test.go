@@ -16,20 +16,22 @@ func TestBidetWriter_WithBufferedWriter(t *testing.T) {
 	data := "TestBidetWriter_WithBufferedWriter"
 
 	testutil.WithTempFile(t, func(filepath string) {
-		file, err := os.OpenFile(filepath, os.O_APPEND, os.ModeType)
+		// Needed to add os.O_WRONLY for linux
+		file, err := os.OpenFile(filepath, os.O_APPEND|os.O_WRONLY, os.ModeType)
 		require.NoError(t, err)
 		defer file.Close()
 
 		writer := bufio.NewWriter(file)
 		require.Less(t, len(data), writer.Available())
-		writer.Write([]byte(data))
+		_, err = writer.Write([]byte(data))
+		require.NoError(t, err)
 
 		pos, err := file.Seek(0, io.SeekEnd)
 		require.NoError(t, err)
 		require.Equal(t, int64(0), pos)
 
 		// After calling flush, the data is available
-		writer.Flush()
+		require.NoError(t, writer.Flush())
 		pos, err = file.Seek(0, io.SeekEnd)
 		require.NoError(t, err)
 		require.Equal(t, int64(len(data)), pos)
@@ -42,14 +44,16 @@ func TestBidetWriter_WithBidetWriter(t *testing.T) {
 	data := "TestBidetWriter_WithBidetWriter"
 
 	testutil.WithTempFile(t, func(filepath string) {
-		file, err := os.OpenFile(filepath, os.O_APPEND, os.ModeType)
+		// Needed to add os.O_WRONLY for linux
+		file, err := os.OpenFile(filepath, os.O_APPEND|os.O_WRONLY, os.ModeType)
 		require.NoError(t, err)
 		defer file.Close()
 
 		bufferedWriter := bufio.NewWriter(file)
 		writer := NewBidetWriter(bufferedWriter)
 		require.Less(t, len(data), bufferedWriter.Available())
-		writer.Write([]byte(data))
+		_, err = writer.Write([]byte(data))
+		require.NoError(t, err)
 
 		pos, err := file.Seek(0, io.SeekEnd)
 		require.NoError(t, err)

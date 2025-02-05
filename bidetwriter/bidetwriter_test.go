@@ -60,3 +60,14 @@ func TestBidetWriter_WithBidetWriter(t *testing.T) {
 		require.Equal(t, int64(len(data)), pos)
 	})
 }
+
+// Make sure that the BidetWriter does not close the underlying writer if is it [os.Stdout]
+func TestBidetWriter_DoesntCloseWithStdout(t *testing.T) {
+	writer := NewBidetWriter(os.Stdout)
+	writer.Close()
+	data := "TestBidetWriter_DoesntCloseWithStdout"
+	n, err := os.Stdout.WriteString(data)
+
+	require.NoError(t, err)
+	require.Equal(t, len(data), n)
+}

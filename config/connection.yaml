@@ -27,4 +27,4 @@ nodes:
     - id: "ipc1"
       channel: "ipc-channel1"
 settings:
-  timeout: 5
+  timeout: 3

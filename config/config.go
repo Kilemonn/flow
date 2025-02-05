@@ -115,34 +115,34 @@ func (c *Config) componentIDsAreUnique() error {
 	nodes := c.Nodes
 
 	for _, port := range nodes.Ports {
-		if _, exists := c.models[port.ID]; isInvalidID(port.ID) || exists {
-			return fmt.Errorf("found port with a duplicate ID [%s] defined or is overriding \"%s\" or \"%s\"", port.ID, StdIn, StdOut)
+		if _, exists := c.models[port.GetID()]; isInvalidID(port.GetID()) || exists {
+			return fmt.Errorf("found port with a duplicate ID [%s] defined or is overriding \"%s\" or \"%s\"", port.GetID(), StdIn, StdOut)
 		} else {
-			c.models[port.ID] = &port
+			c.models[port.GetID()] = &port
 		}
 	}
 
 	for _, file := range nodes.Files {
-		if _, exists := c.models[file.ID]; isInvalidID(file.ID) || exists {
-			return fmt.Errorf("found file with a duplicate ID [%s] defined or is overriding \"%s\" or \"%s\"", file.ID, StdIn, StdOut)
+		if _, exists := c.models[file.GetID()]; isInvalidID(file.GetID()) || exists {
+			return fmt.Errorf("found file with a duplicate ID [%s] defined or is overriding \"%s\" or \"%s\"", file.GetID(), StdIn, StdOut)
 		} else {
-			c.models[file.ID] = file
+			c.models[file.GetID()] = file
 		}
 	}
 
 	for _, socket := range nodes.Sockets {
-		if _, exists := c.models[socket.ID]; isInvalidID(socket.ID) || exists {
-			return fmt.Errorf("found socket with a duplicate ID [%s] defined or is overriding \"%s\" or \"%s\"", socket.ID, StdIn, StdOut)
+		if _, exists := c.models[socket.GetID()]; isInvalidID(socket.GetID()) || exists {
+			return fmt.Errorf("found socket with a duplicate ID [%s] defined or is overriding \"%s\" or \"%s\"", socket.GetID(), StdIn, StdOut)
 		} else {
-			c.models[socket.ID] = socket
+			c.models[socket.GetID()] = socket
 		}
 	}
 
 	for _, ipc := range nodes.Ipcs {
-		if _, exists := c.models[ipc.ID]; isInvalidID(ipc.ID) || exists {
-			return fmt.Errorf("found ipc with a duplicate ID [%s] defined or is overriding \"%s\" or \"%s\"", ipc.ID, StdIn, StdOut)
+		if _, exists := c.models[ipc.GetID()]; isInvalidID(ipc.GetID()) || exists {
+			return fmt.Errorf("found ipc with a duplicate ID [%s] defined or is overriding \"%s\" or \"%s\"", ipc.GetID(), StdIn, StdOut)
 		} else {
-			c.models[ipc.ID] = ipc
+			c.models[ipc.GetID()] = ipc
 		}
 	}
 

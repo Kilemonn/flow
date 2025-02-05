@@ -3,23 +3,31 @@ package bidetwriter
 import (
 	"bufio"
 	"io"
+	"os"
 )
 
 // BidetWriter a writer that calls the provided Flushfunc() function after the io.Writer.Write() call.
 type BidetWriter struct {
-	Writer    io.Writer
-	FlushFunc func() error
+	writeCloser io.Closer
+	Writer      io.Writer
+	FlushFunc   func() error
 }
 
-func NewBidetWriter(w *bufio.Writer) BidetWriter {
+// Takes a write closer and will close the file if Close() is called.
+func NewBidetWriter(w io.WriteCloser) BidetWriter {
+	bufWriter := bufio.NewWriter(w)
 	return BidetWriter{
-		Writer:    w,
-		FlushFunc: w.Flush,
+		writeCloser: w,
+		Writer:      bufWriter,
+		FlushFunc:   bufWriter.Flush,
 	}
 }
 
 func (bw BidetWriter) Close() error {
-	return bw.FlushFunc()
+	if bw.writeCloser != os.Stdout {
+		return bw.writeCloser.Close()
+	}
+	return nil
 }
 
 func (bw BidetWriter) Write(b []byte) (n int, err error) {

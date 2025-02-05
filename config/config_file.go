@@ -1,7 +1,6 @@
 package config
 
 import (
-	"bufio"
 	"errors"
 	"fmt"
 	"io"
@@ -32,7 +31,7 @@ func (c ConfigFile) Validate() error {
 	if _, err := os.Stat(c.Path); errors.Is(err, os.ErrNotExist) {
 		file, err := os.Create(c.Path)
 		if err != nil {
-			return fmt.Errorf("failed to create file with ID [%s] and path [%s] with error %s", c.ID, c.Path, err.Error())
+			return fmt.Errorf("failed to create file with ID [%s] and path [%s] with error %s", c.GetID(), c.Path, err.Error())
 		}
 		file.Close()
 	}
@@ -51,7 +50,7 @@ func (c ConfigFile) Writer() (io.WriteCloser, error) {
 	if err != nil {
 		return nil, err
 	}
-	return bidetwriter.NewBidetWriter(bufio.NewWriter(c.file)), nil
+	return bidetwriter.NewBidetWriter(c.file), nil
 }
 
 func (c *ConfigFile) initialiseFile() error {

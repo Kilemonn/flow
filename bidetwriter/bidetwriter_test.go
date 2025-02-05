@@ -49,9 +49,9 @@ func TestBidetWriter_WithBidetWriter(t *testing.T) {
 		require.NoError(t, err)
 		defer file.Close()
 
-		bufferedWriter := bufio.NewWriter(file)
-		writer := NewBidetWriter(bufferedWriter)
-		require.Less(t, len(data), bufferedWriter.Available())
+		writer := NewBidetWriter(file)
+		defer writer.Close()
+		require.Less(t, len(data), writer.Writer.(*bufio.Writer).Available())
 		_, err = writer.Write([]byte(data))
 		require.NoError(t, err)
 
@@ -59,4 +59,15 @@ func TestBidetWriter_WithBidetWriter(t *testing.T) {
 		require.NoError(t, err)
 		require.Equal(t, int64(len(data)), pos)
 	})
+}
+
+// Make sure that the BidetWriter does not close the underlying writer if is it [os.Stdout]
+func TestBidetWriter_DoesntCloseWithStdout(t *testing.T) {
+	writer := NewBidetWriter(os.Stdout)
+	writer.Close()
+	data := "TestBidetWriter_DoesntCloseWithStdout"
+	n, err := os.Stdout.WriteString(data)
+
+	require.NoError(t, err)
+	require.Equal(t, len(data), n)
 }

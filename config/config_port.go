@@ -36,13 +36,13 @@ func (c ConfigPort) Validate() error {
 func (c *ConfigPort) Open() error {
 	port, err := serial.OpenSerialConnection(c.Channel, c.Mode)
 	if err != nil {
-		return fmt.Errorf("failed to open connection to port with comm [%s] and ID [%s] with error: [%s]", c.Channel, c.ID, err.Error())
+		return fmt.Errorf("failed to open connection to port with comm [%s] and ID [%s] with error: [%s]", c.Channel, c.GetID(), err.Error())
 	}
 
 	if c.ReadTimeout > 0 {
 		err = port.SetReadTimeout(time.Millisecond * time.Duration(c.ReadTimeout))
 		if err != nil {
-			return fmt.Errorf("failed to set timeout on serial port connection with comm [%s] and ID [%s] with error: [%s]", c.Channel, c.ID, err.Error())
+			return fmt.Errorf("failed to set timeout on serial port connection with comm [%s] and ID [%s] with error: [%s]", c.Channel, c.GetID(), err.Error())
 		}
 	}
 

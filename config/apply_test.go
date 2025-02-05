@@ -1,6 +1,7 @@
 package config
 
 import (
+	"os"
 	"testing"
 
 	"github.com/stretchr/testify/require"
@@ -22,4 +23,21 @@ func TestReadConfig(t *testing.T) {
 
 	require.NotNil(t, config.Settings)
 	require.Equal(t, 5, config.Settings.Timeout)
+}
+
+func TestApplyConfigurationFromFile(t *testing.T) {
+	filepath := "connection.yaml"
+	data := "TestApplyConfigurationFromFile"
+
+	inputFile := "input.txt"
+	require.NoError(t, os.WriteFile(inputFile, []byte(data), 0666))
+	outputFile := "output.txt"
+	defer os.Remove(inputFile)
+	defer os.Remove(outputFile)
+
+	ApplyConfigurationFromFile(filepath)
+
+	read, err := os.ReadFile(outputFile)
+	require.NoError(t, err)
+	require.Equal(t, data, string(read))
 }

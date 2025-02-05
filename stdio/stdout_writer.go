@@ -1,7 +1,6 @@
 package stdio
 
 import (
-	"bufio"
 	"io"
 	"os"
 
@@ -9,5 +8,5 @@ import (
 )
 
 func CreateStdOutWriter() (io.WriteCloser, error) {
-	return bidetwriter.NewBidetWriter(bufio.NewWriter(os.Stdout)), nil
+	return bidetwriter.NewBidetWriter(os.Stdout), nil
 }

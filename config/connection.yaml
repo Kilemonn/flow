@@ -1,20 +1,25 @@
 connections:
   - readerid: "InputFile"
+    writerid: "tcp1"
+  - readerid: "tcp1"
+    writerid: "ipc1"
+  - readerid: "ipc1"
+    writerid: "udp1"
+  - readerid: "udp1"
     writerid: "OutputFile"
-  - readerid: "OutputFile"
-    writerid: "stdout"
 nodes:
   files:
     - id: "InputFile"
       path: "input.txt"
     - id: "OutputFile"
       path: "output.txt"
+      trunc: true
   sockets:
-    - id: "Send-from-TCP"
+    - id: "tcp1"
       protocol: "TCP"
       address: "127.0.0.1"
       port: 57132
-    - id: "Recv-to-UDP"
+    - id: "udp1"
       protocol: "UDP"
       address: "127.0.0.1"
       port: 63211

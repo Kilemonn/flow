@@ -1,7 +1,6 @@
 package config
 
 import (
-	"bufio"
 	"errors"
 	"fmt"
 	"io"
@@ -51,7 +50,7 @@ func (c ConfigFile) Writer() (io.WriteCloser, error) {
 	if err != nil {
 		return nil, err
 	}
-	return bidetwriter.NewBidetWriter(bufio.NewWriter(c.file)), nil
+	return bidetwriter.NewBidetWriter(c.file), nil
 }
 
 func (c *ConfigFile) initialiseFile() error {

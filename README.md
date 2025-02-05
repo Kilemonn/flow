@@ -1,4 +1,10 @@
 # flow
+<!-- 
+Coverage:
+  go test -v -coverprofile cover.out ./...
+  go tool cover -html cover.out -o cover.html
+ -->
+
 A data channel creation and chaining CLI tool for directing data flow between processes, files, sockets and serial ports.
 
 [![Go Coverage](https://github.com/Kilemonn/flow/wiki/coverage.svg)](https://raw.githack.com/wiki/Kilemonn/flow/coverage.html)

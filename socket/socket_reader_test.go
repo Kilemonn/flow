@@ -11,11 +11,11 @@ import (
 )
 
 func TestUDPReadAndWrite(t *testing.T) {
-	reader, err := NewUDPSocketReader("127.0.0.1", 0)
+	reader, err := CreateSocketReader("udp", "127.0.0.1", 0)
 	require.NoError(t, err)
 	defer reader.Close()
 
-	writer, err := NewUDPSocketWriter("127.0.0.1", testutil.GetUDPPort(reader.(UDPTimeoutReader).Conn))
+	writer, err := CreateSocketWriter("udp", "127.0.0.1", testutil.GetUDPPort(reader.(UDPTimeoutReader).Conn))
 	require.NoError(t, err)
 	defer writer.Close()
 
@@ -164,11 +164,11 @@ func TestTCPRead_DataFromMultipleSockets(t *testing.T) {
 
 // Ensure that we remove the connection if its remote peer has closed the connection.
 func TestTCPRead_RemoteConnectionCloses(t *testing.T) {
-	reader, err := NewTCPSocketReader("127.0.0.1", 0)
+	reader, err := CreateSocketReader("tcp", "127.0.0.1", 0)
 	require.NoError(t, err)
 	defer reader.Close()
 
-	writer1, err := NewTCPSocketWriter("127.0.0.1", testutil.GetTCPPort(reader.(*TCPTimeoutReader).Listener))
+	writer1, err := CreateSocketWriter("tcp", "127.0.0.1", testutil.GetTCPPort(reader.(*TCPTimeoutReader).Listener))
 	require.NoError(t, err)
 	defer writer1.Close()
 
@@ -185,4 +185,34 @@ func TestTCPRead_RemoteConnectionCloses(t *testing.T) {
 	require.Equal(t, 0, n)
 
 	require.Equal(t, 0, reader.(*TCPTimeoutReader).connectionCount())
+}
+
+func TestCreateSocketReader_invalidProtocol(t *testing.T) {
+	_, err := CreateSocketReader("neither", "", 0)
+	require.Error(t, err)
+}
+
+func TestNewTCPSocketReader_invalidAddress(t *testing.T) {
+	_, err := NewTCPSocketReader("186753412.123461254.123416254", 0)
+	require.Error(t, err)
+}
+
+func TestNewUDPSocketReader_invalidAddress(t *testing.T) {
+	_, err := NewUDPSocketReader("186753412.123461254.123416254", 0)
+	require.Error(t, err)
+}
+
+func TestCreateSocketWriter_invalidProtocol(t *testing.T) {
+	_, err := CreateSocketWriter("neither", "", 0)
+	require.Error(t, err)
+}
+
+func TestNewTCPSocketWriter_invalidAddress(t *testing.T) {
+	_, err := NewTCPSocketWriter("186753412.123461254.123416254", 0)
+	require.Error(t, err)
+}
+
+func TestNewUDPSocketWriter_invalidAddress(t *testing.T) {
+	_, err := NewUDPSocketWriter("186753412.123461254.123416254", 0)
+	require.Error(t, err)
 }

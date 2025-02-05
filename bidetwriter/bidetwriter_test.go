@@ -51,6 +51,7 @@ func TestBidetWriter_WithBidetWriter(t *testing.T) {
 
 		bufferedWriter := bufio.NewWriter(file)
 		writer := NewBidetWriter(bufferedWriter)
+		defer writer.Close()
 		require.Less(t, len(data), bufferedWriter.Available())
 		_, err = writer.Write([]byte(data))
 		require.NoError(t, err)

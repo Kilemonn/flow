@@ -7,6 +7,9 @@ Coverage:
 
 A data channel creation and chaining CLI tool for directing data flow between processes, files, sockets and serial ports.
 
+This can be used for various tasks such as automated testing, pipelines or other tasks to hand data across to different applications/sockets/serial ports or files for processing.
+Data can be duplicated and written to multiple destinations as it flows between each node. When configured with a timeout the application can automatically close once no data has flowed between any node for the specified duration (to deal with any tests in inconsistent timing requirements).
+
 [![Go Coverage](https://github.com/Kilemonn/flow/wiki/coverage.svg)](https://raw.githack.com/wiki/Kilemonn/flow/coverage.html)
 
 ## Quick Start

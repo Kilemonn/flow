@@ -5,6 +5,7 @@ Coverage:
   go tool cover -html cover.out -o cover.html
  -->
 
+[![Go Report Card](https://goreportcard.com/badge/github.com/Kilemonn/flow)](https://goreportcard.com/report/github.com/Kilemonn/flow)
 [![Go Coverage](https://github.com/Kilemonn/flow/wiki/coverage.svg)](https://raw.githack.com/wiki/Kilemonn/flow/coverage.html)
 
 

@@ -22,7 +22,7 @@ func (r UDPTimeoutReader) Read(b []byte) (n int, err error) {
 	if err != nil {
 		// We got an error and it IS a timeout so leave without error
 		if e, ok := err.(net.Error); ok && e.Timeout() {
-			// Return EOF here so the call from io.Copy doesn't permenantly loop
+			// Return EOF here so the call from io.Copy doesn't permanently loop
 			return n, io.EOF
 		}
 	}

@@ -7,7 +7,7 @@ import (
 	"os"
 
 	"github.com/Kilemonn/flow/bidetwriter"
-	"github.com/Kilemonn/flow/file"
+	"github.com/Kilemonn/flow/sync_file_read_writer"
 )
 
 type ConfigFile struct {
@@ -17,7 +17,7 @@ type ConfigFile struct {
 	// meaning it is in append mode.
 	Trunc bool
 
-	file *file.SyncFileReadWriter
+	file *sync_file_read_writer.SyncFileReadWriter
 }
 
 // [ConfigModel.GetID]
@@ -59,7 +59,7 @@ func (c *ConfigFile) initialiseFile() error {
 		if c.Trunc {
 			mode |= os.O_TRUNC
 		}
-		temp, err := file.NewSynchronisedFileReadWriter(c.Path, mode)
+		temp, err := sync_file_read_writer.NewSynchronisedFileReadWriter(c.Path, mode)
 		c.file = &temp
 		return err
 	}

@@ -1,4 +1,4 @@
-package file
+package sync_file_read_writer
 
 import (
 	"io"

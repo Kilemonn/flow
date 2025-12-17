@@ -1,4 +1,4 @@
-package file
+package sync_file_read_writer
 
 import (
 	"io"
@@ -40,7 +40,7 @@ func (rw *SyncFileReadWriter) Read(b []byte) (int, error) {
 }
 
 // [io.Writer]
-// Moves the file pointer to the end, performs the read, then returns it back to its prior position ready to Read
+// Moves the file pointer to the end, performs the read, then returns it back to its prior position ready to [io.Read]
 func (rw *SyncFileReadWriter) Write(b []byte) (int, error) {
 	rw.mutex.Lock()
 	defer rw.mutex.Unlock()

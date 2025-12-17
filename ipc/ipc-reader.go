@@ -52,6 +52,9 @@ func (r *IPCReader) acceptWaitingConnections() {
 	}
 }
 
+// Initially calls [IPCReader.acceptWaitingConnections] to accept pending incoming
+// connections before then wrapping all accepted clients in a
+// [queuedreader.QueuedReader] and calling [io.Read].
 func (r *IPCReader) Read(b []byte) (n int, err error) {
 	r.acceptWaitingConnections()
 
